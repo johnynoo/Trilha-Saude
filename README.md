@@ -1,8 +1,8 @@
 # TrilhaSaúde
 
-Aplicativo web demonstrativo para acompanhamento de consultas, exames e etapas da jornada de cuidado. Sob supervisão do professor Breno Holanda na Uninassau - Graças de Recife.
+Aplicativo web demonstrativo para acompanhamento de consultas, exames e etapas da jornada de cuidado. Na turma ADS-A sob a notável supervisão do professor Breno Holanda na Uninassau - Graças de Recife.
 
-Com o apoio essencial de Karllota Lawren no código e principalmente Betânia leonidas na idealização do projeto, além de João Victor e João Lucas no apoio às ideias e ao suporte técnico do projeto.
+Com o apoio essencial de Karllota Lawren no código e principalmente Betânia leonidas na idealização do projeto, além de João Victor e João Lucas e Thallys no apoio às ideias e ao suporte técnico do projeto.
 
 Integrantes:
 
