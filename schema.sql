@@ -1,0 +1,81 @@
+-- TrilhaSaúde - MySQL 8.0+ / utf8mb4
+-- Execute este arquivo com usuário que tenha permissão para criar o banco.
+CREATE DATABASE IF NOT EXISTS trilhasaude
+  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE trilhasaude;
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(60) NOT NULL,
+  email VARCHAR(254) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  phone VARCHAR(20) NOT NULL DEFAULT '',
+  done TINYINT UNSIGNED NOT NULL DEFAULT 1,
+  lemb BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_users_email (email)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS sessions (
+  token_hash CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  user_id BIGINT UNSIGNED NOT NULL,
+  expires_at DATETIME NOT NULL,
+  PRIMARY KEY (token_hash),
+  KEY ix_sessions_user (user_id),
+  KEY ix_sessions_expiration (expires_at),
+  CONSTRAINT fk_sessions_user FOREIGN KEY (user_id)
+    REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS appointments (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id BIGINT UNSIGNED NOT NULL,
+  title VARCHAR(60) NOT NULL,
+  who VARCHAR(60) NOT NULL DEFAULT '',
+  appt_at DATETIME NOT NULL COMMENT 'Data/hora UTC',
+  confirmed BOOLEAN NOT NULL DEFAULT FALSE,
+  warned BOOLEAN NOT NULL DEFAULT FALSE,
+  PRIMARY KEY (id),
+  KEY ix_appointments_user_date (user_id, appt_at),
+  CONSTRAINT fk_appointments_user FOREIGN KEY (user_id)
+    REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS exams (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id BIGINT UNSIGNED NOT NULL,
+  name VARCHAR(60) NOT NULL,
+  exam_date DATE NOT NULL,
+  status VARCHAR(30) NOT NULL DEFAULT 'Agendado',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY ix_exams_user_date (user_id, exam_date),
+  CONSTRAINT fk_exams_user FOREIGN KEY (user_id)
+    REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id BIGINT UNSIGNED NOT NULL,
+  title VARCHAR(120) NOT NULL,
+  detail VARCHAR(255) NOT NULL DEFAULT '',
+  is_read BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY ix_notifications_user (user_id, id),
+  CONSTRAINT fk_notifications_user FOREIGN KEY (user_id)
+    REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS messages (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  user_id BIGINT UNSIGNED NOT NULL,
+  is_mine BOOLEAN NOT NULL DEFAULT FALSE,
+  body VARCHAR(500) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY ix_messages_user (user_id, id),
+  CONSTRAINT fk_messages_user FOREIGN KEY (user_id)
+    REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
