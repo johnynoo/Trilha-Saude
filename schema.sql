@@ -1,5 +1,3 @@
--- TrilhaSaúde - MySQL 8.0+ / utf8mb4
--- Execute este arquivo com usuário que tenha permissão para criar o banco.
 CREATE DATABASE IF NOT EXISTS trilhasaude
   CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE trilhasaude;
